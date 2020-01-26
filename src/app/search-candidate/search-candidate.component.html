@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="row ml-4 mt-4">
+  <div class="col-lg-4">
+    <mat-form-field>
+      <mat-label>Parameter 1</mat-label>
+      <mat-select [(value)]="selectedOne">
+        <mat-option>None</mat-option>
+        <mat-option value="1">1</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Parameter 2</mat-label>
+      <mat-select [(value)]="selectedTwo">
+        <mat-option>None</mat-option>
+        <mat-option value="2">2</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-lg-4">
+    <mat-form-field>
+      <mat-label>Parameter 3</mat-label>
+      <mat-select [(value)]="selectedThree">
+        <mat-option>None</mat-option>
+        <mat-option value="3">3</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Parameter 4</mat-label>
+      <mat-select [(value)]="selectedFour">
+        <mat-option>None</mat-option>
+        <mat-option value="4">4</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+    <div class="col-lg-4">
+      <mat-form-field>
+        <mat-label>Parameter 5</mat-label>
+        <mat-select [(value)]="selectedFive">
+          <mat-option>None</mat-option>
+          <mat-option value="5">5</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mdbBtn type="button" color="indigo" mdbWavesEffect>Search Candidates</button>
+    </div>
+  </div>
+
+
+  <table mdbTable class="mat-elevation-z8 ml-4 mt-2">
+    <thead class="grey lighten-1 black-text">
+    <tr>
+      <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr mdbTableCol *ngFor="let el of elements">
+      <th scope="row">{{el.id}}</th>
+      <td>{{el.first}}</td>
+      <td>{{el.last}}</td>
+      <td>{{el.handle}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+
+</div>
+
+
