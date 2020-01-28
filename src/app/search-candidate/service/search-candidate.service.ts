@@ -8,13 +8,18 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 })
 export class SearchCandidateService {
 
-  searchApi = environment.apiUrl;
+  searchApi = environment.apiUrl + 'questionnaire';
+  searchApiQuestions = environment.apiUrl + 'questions';
 
   constructor(private http: HttpClient) { }
 
-  getMatchingClientsByAnswerIndex(answerIndex): Observable<any> {
-    const options = {params: new HttpParams().set('idx', answerIndex)};
-    return this.http.get(this.searchApi, options);
+  getMatchingClientsByAnswerScore(query): Observable<any> {
+    const options = {params: new HttpParams().set('searchQuery', query)};
+    return this.http.get(`${this.searchApi}/employee-mapping`, options);
+  }
+
+  getQuestions(): Observable<any> {
+    return this.http.get(`${this.searchApiQuestions}/all`);
   }
 
 }

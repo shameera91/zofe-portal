@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-
-export interface Food {
-  value: string;
-  viewValue: string;
-}
+import {Component, OnInit} from '@angular/core';
+import {SearchCandidateService} from './service/search-candidate.service';
+import {QuestionAnswer} from './modal/question-answer';
 
 @Component({
   selector: 'app-search-candidate',
@@ -11,27 +8,77 @@ export interface Food {
   styleUrls: ['./search-candidate.component.scss']
 })
 export class SearchCandidateComponent implements OnInit {
+  headElements = ['Expose', 'Match Level', 'Serial Number'];
+
   selectedOne;
-  selectedTwo;
-  selectedThree;
-  selectedFour;
-  selectedFive;
-  foods: Food[] = [
-    {value: '1', viewValue: '1'}
-  ];
 
-  elements: any = [
-    {id: 1, first: 'Mark', last: 'Otto', handle: '@mdo'},
-    {id: 2, first: 'Jacob', last: 'Thornton', handle: '@fat'},
-    {id: 3, first: 'Larry', last: 'the Bird', handle: '@twitter'},
-    {id: 4, first: 'Larry', last: 'the Bird', handle: '@twitter'}
-  ];
+  dataModal: any[];
+  allQuestions: any;
+  questionIdsArr: Array<string> = [];
+  questionsArr: Array<string> = [];
+  answersArr: Array<string> = [];
+  qaArr: Array<QuestionAnswer> = [];
 
-  headElements = ['ID', 'Expose', 'Match Level', 'Serial Number'];
+  qnaMap = {};
 
-  constructor() { }
+  constructor(public searchCandidateService: SearchCandidateService) {
+  }
 
   ngOnInit() {
+    this.getQuestions();
+  }
+
+  addSelectedOption(questionId, event) {
+    this.qnaMap[questionId] = event.value;
+    console.log(this.qnaMap);
+  }
+
+  getMatchingEmployees() {
+    const content = [];
+    for (const key in this.qnaMap) {
+      if (this.qnaMap.hasOwnProperty(key)) {
+        content.push(`${key}:${this.qnaMap[key]}`);
+      }
+    }
+    this.searchCandidateService.getMatchingClientsByAnswerScore(content.join()).subscribe((res) => {
+      this.dataModal = res;
+    }, err => {
+
+    });
+  }
+
+  getQuestions() {
+    this.searchCandidateService.getQuestions().subscribe((res) => {
+      this.allQuestions = res;
+      this.allQuestions.forEach((element, index, array) => {
+        let s = '';
+        this.questionsArr.push(element.question);
+        this.questionIdsArr.push(element.id);
+        element.answers.forEach((el, idx, arr) => {
+          s += el.answerText;
+          if (idx !== (arr.length - 1)) {
+            s += ',';
+          }
+        });
+        this.answersArr.push(s);
+      });
+
+      for (let i = 0; i < this.questionsArr.length; i++) {
+        this.qaArr.push(this.prepareBody(this.questionsArr[i], this.answersArr[i], this.questionIdsArr[i]));
+      }
+    }, err => {
+
+    });
+  }
+
+  private prepareBody(que, ans, qId): QuestionAnswer {
+    const arr = ans.split(',');
+    return {
+      id: qId,
+      question: que,
+      answerArr: arr
+    } as QuestionAnswer;
   }
 
 }
+

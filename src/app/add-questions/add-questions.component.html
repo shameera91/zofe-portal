@@ -2,35 +2,29 @@
   <div class="mt-4 ml-3">
     <form>
       <div class="row">
-        <div class="col-md-12 form-field-container">
+        <div class="col-md-6 form-field-container">
           <mat-form-field>
-              <input matInput placeholder="Enter Question">
+            <input matInput placeholder="Enter Question" [(ngModel)]="question" name="inputQuestion">
           </mat-form-field>
         </div>
       </div>
-      <div class="row mt-4">
+      <!--<div class="row mt-4">
         <div class="col-md-12">
           <mat-radio-group aria-label="Select an option" [(ngModel)]="selectedOption" name="optionRadio">
             <mat-radio-button value="LEVEL_BASED">Level Based</mat-radio-button>
             <mat-radio-button value="OPTION_BASED">Option Based</mat-radio-button>
           </mat-radio-group>
         </div>
-      </div>
-      <div class="row mt-2" *ngIf="selectedOption == 'LEVEL_BASED'">
+      </div>-->
+      <div class="row mt-2">
         <div class="col-md-6 form-field-container">
           <mat-form-field>
-            <input matInput placeholder="How Many Levels">
+            <input matInput placeholder="Answers (use commas to separate) " [(ngModel)]="answers" name="inputAnswers">
           </mat-form-field>
         </div>
       </div>
-      <div class="row mt-2" *ngIf="selectedOption == 'OPTION_BASED'">
-        <div class="col-md-6 form-field-container">
-          <mat-form-field>
-            <input matInput placeholder="Add Options (use commas to separate options)">
-          </mat-form-field>
-        </div>
-      </div>
-      <button type="submit" mdbBtn color="indigo" style="margin-left: -1px;">Submit</button>
+      <button type="submit" mdbBtn color="indigo" style="margin-left: -2px;" (click)="addQuestionAndAnswers()">Save
+      </button>
     </form>
   </div>
 </div>
