@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <mat-form-field *ngFor="let elmn of qaArr;let j = index;" class="col-lg-6">
+        <mat-label>{{elmn.question}}</mat-label>
+        <mat-select [value]="selectedOne" (selectionChange)="addSelectedOption(elmn.id,$event)">
+          <mat-option *ngFor="let ans of elmn.answerArr; let i = index" [value]="i">
+            {{ans}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div style="margin-left: 23px;">
+      <button (click)="saveEmployeeQuestionAndAnswers()" mdbBtn type="button" color="indigo" mdbWavesEffect>Submit Answers</button>
+    </div>
+  </div>
+</div>

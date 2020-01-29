@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {QuestionInput} from './modal/question-input';
 import {AddQuestionsService} from './service/add-questions.service';
+import {NotificationService} from '../common/notification/notification.service';
 
 @Component({
   selector: 'app-add-questions',
@@ -13,7 +14,8 @@ export class AddQuestionsComponent implements OnInit {
   answers: string;
   addedOptions: string;
 
-  constructor(public questionsService: AddQuestionsService) {
+  constructor(public questionsService: AddQuestionsService,
+              public notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -22,12 +24,14 @@ export class AddQuestionsComponent implements OnInit {
   addQuestionAndAnswers() {
     if (this.question && this.answers) {
       this.questionsService.saveQuestionAndAnswers(this.prepareBody()).subscribe((res) => {
-        console.log('added');
+         this.notificationService.success('question added');
+         this.question = '';
+         this.answers = '';
       }, error => {
-        console.log('err');
+        this.notificationService.error('question adding error');
       });
     } else {
-      console.log('empty fields');
+      this.notificationService.warning('fill all fields before submitting');
     }
   }
 

@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {SearchCandidateService} from './service/search-candidate.service';
-import {QuestionAnswer} from './modal/question-answer';
+import {QuestionAnswer} from '../search-candidate/modal/question-answer';
+import {EmployeeQuestionsService} from './service/employee-questions.service';
+import {SearchCandidateService} from '../search-candidate/service/search-candidate.service';
+import {EmpQuestionAnswerInput} from './modal/emp-question-answer-input';
 
 @Component({
-  selector: 'app-search-candidate',
-  templateUrl: './search-candidate.component.html',
-  styleUrls: ['./search-candidate.component.scss']
+  selector: 'app-employee-questions',
+  templateUrl: './employee-questions.component.html',
+  styleUrls: ['./employee-questions.component.scss']
 })
-export class SearchCandidateComponent implements OnInit {
-  headElements = ['Expose', 'Match Level', 'Serial Number'];
-
+export class EmployeeQuestionsComponent implements OnInit {
   selectedOne;
 
   dataModal: any[];
@@ -21,7 +21,8 @@ export class SearchCandidateComponent implements OnInit {
 
   qnaMap = {};
 
-  constructor(public searchCandidateService: SearchCandidateService) {
+  constructor(public questionsService: EmployeeQuestionsService,
+              public searchCandidateService: SearchCandidateService) {
   }
 
   ngOnInit() {
@@ -33,22 +34,16 @@ export class SearchCandidateComponent implements OnInit {
     console.log(this.qnaMap);
   }
 
-  getMatchingEmployees() {
-    const content = [];
-    for (const key in this.qnaMap) {
-      if (this.qnaMap.hasOwnProperty(key)) {
-        content.push(`${key}:${this.qnaMap[key]}`);
-      }
-    }
-    this.searchCandidateService.getMatchingClientsByAnswerScore(content.join()).subscribe((res) => {
-      this.dataModal = res;
-    }, err => {
+  saveEmployeeQuestionAndAnswers() {
+    this.searchCandidateService.saveEmpQuestionAndAnswers(this.prepareBodyQnA()).subscribe((res) => {
+
+    }, error => {
 
     });
   }
 
-  getQuestions() {                                                               /* set this form backend and send*/
-    this.searchCandidateService.getQuestions().subscribe((res) => {
+  getQuestions() {
+    this.questionsService.getQuestions().subscribe((res) => {
       this.allQuestions = res;
       this.allQuestions.forEach((element, index, array) => {
         let s = '';
@@ -80,5 +75,16 @@ export class SearchCandidateComponent implements OnInit {
     } as QuestionAnswer;
   }
 
+  private prepareBodyQnA(): EmpQuestionAnswerInput {
+    const content = [];
+    for (const key in this.qnaMap) {
+      if (this.qnaMap.hasOwnProperty(key)) {
+        content.push(`${key}:${this.qnaMap[key]}`);
+      }
+    }
+    return {
+      questionAnswers: content.join(),
+      employeeId: 3,   /* should come form db */
+    } as EmpQuestionAnswerInput;
+  }
 }
-

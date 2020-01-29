@@ -11,6 +11,8 @@ import { PositionsListComponent } from './positions-list/positions-list.componen
 import { SearchCandidateComponent } from './search-candidate/search-candidate.component';
 import { AddQuestionsComponent } from './add-questions/add-questions.component';
 import {FormsModule} from '@angular/forms';
+import { EmployeeQuestionsComponent } from './employee-questions/employee-questions.component';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import {FormsModule} from '@angular/forms';
     NavigationComponent,
     PositionsListComponent,
     SearchCandidateComponent,
-    AddQuestionsComponent
+    AddQuestionsComponent,
+    EmployeeQuestionsComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +29,8 @@ import {FormsModule} from '@angular/forms';
     SharedModule,
     AppRoutingModule,
     MDBBootstrapModule.forRoot(),
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot({preventDuplicates: true}),
   ],
   providers: [],
   bootstrap: [AppComponent]
