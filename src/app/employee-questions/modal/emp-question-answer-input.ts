@@ -1,4 +1,6 @@
 export class EmpQuestionAnswerInput {
   questionAnswers: string;
-  employeeId: number;
+  empName: string;
+  empEmail: string;
+  empPhone: string;
 }

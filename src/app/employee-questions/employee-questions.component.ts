@@ -3,6 +3,7 @@ import {QuestionAnswer} from '../search-candidate/modal/question-answer';
 import {EmployeeQuestionsService} from './service/employee-questions.service';
 import {SearchCandidateService} from '../search-candidate/service/search-candidate.service';
 import {EmpQuestionAnswerInput} from './modal/emp-question-answer-input';
+import {NotificationService} from '../common/notification/notification.service';
 
 @Component({
   selector: 'app-employee-questions',
@@ -21,8 +22,13 @@ export class EmployeeQuestionsComponent implements OnInit {
 
   qnaMap = {};
 
+  empName;
+  empPhone;
+  empEmail;
+
   constructor(public questionsService: EmployeeQuestionsService,
-              public searchCandidateService: SearchCandidateService) {
+              public searchCandidateService: SearchCandidateService,
+              public notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -35,11 +41,20 @@ export class EmployeeQuestionsComponent implements OnInit {
   }
 
   saveEmployeeQuestionAndAnswers() {
-    this.searchCandidateService.saveEmpQuestionAndAnswers(this.prepareBodyQnA()).subscribe((res) => {
+    if (this.empName && this.empEmail && this.empPhone) {
+      this.searchCandidateService.saveEmpQuestionAndAnswers(this.prepareBodyQnA()).subscribe((res) => {
+        this.selectedOne = '';
+        this.empName = '';
+        this.empEmail = '';
+        this.empPhone = '';
+        this.notificationService.success('Answers saved');
+      }, error => {
+        this.notificationService.error('Error saving answers');
+      });
+    } else {
+      this.notificationService.warning('Filling employee details is mandatory');
+    }
 
-    }, error => {
-
-    });
   }
 
   getQuestions() {
@@ -84,7 +99,9 @@ export class EmployeeQuestionsComponent implements OnInit {
     }
     return {
       questionAnswers: content.join(),
-      employeeId: 3,   /* should come form db */
+      empName: this.empName,
+      empEmail: this.empEmail,
+      empPhone: this.empPhone
     } as EmpQuestionAnswerInput;
   }
 }

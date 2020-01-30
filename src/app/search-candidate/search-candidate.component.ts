@@ -47,7 +47,7 @@ export class SearchCandidateComponent implements OnInit {
     });
   }
 
-  getQuestions() {                                                               /* set this form backend and send*/
+  getQuestions() {                      /* make the arrangement of this from backend and send*/
     this.searchCandidateService.getQuestions().subscribe((res) => {
       this.allQuestions = res;
       this.allQuestions.forEach((element, index, array) => {
